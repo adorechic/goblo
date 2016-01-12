@@ -1,12 +1,18 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
+	"html/template"
 )
 
+type Page struct {
+	Title string
+}
+
 func handler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hello")
+	p := Page{"title"}
+	t := template.Must(template.ParseFiles("top.html"))
+	t.Execute(w, p)
 }
 
 func main() {
