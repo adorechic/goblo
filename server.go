@@ -23,7 +23,15 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func signupAction(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "GET" {
+		t := template.Must(template.ParseFiles("signup.html"))
+		t.Execute(w, nil)
+	}
+}
+
 func main() {
 	http.HandleFunc("/", handler)
+	http.HandleFunc("/signup", signupAction)
 	http.ListenAndServe(":3000", nil)
 }
