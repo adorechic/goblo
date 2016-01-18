@@ -24,7 +24,12 @@ func handler(w http.ResponseWriter, r *http.Request) {
 }
 
 func signupAction(w http.ResponseWriter, r *http.Request) {
-	if r.Method == "GET" {
+	if r.Method == "POST" {
+		r.ParseForm()
+		fmt.Println("username:", r.Form["username"])
+		fmt.Println("password:", r.Form["password"])
+
+	} else {
 		t := template.Must(template.ParseFiles("signup.html"))
 		t.Execute(w, nil)
 	}
