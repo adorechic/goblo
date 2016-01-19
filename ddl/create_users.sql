@@ -1,0 +1,7 @@
+CREATE TABLE `users` (
+  `id` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `name` VARCHAR(64) NOT NULL,
+  `password` VARCHAR(64) NOT NULL,
+  `created_at` TIMESTAMP NOT NULL,
+  `updated_at` TIMESTAMP NOT NULL
+);
