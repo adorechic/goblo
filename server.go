@@ -62,9 +62,17 @@ func signupAction(w http.ResponseWriter, r *http.Request) {
 		t.Execute(w, nil)
 	}
 }
+func signinAction(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "POST" {
+	} else {
+		t := template.Must(template.ParseFiles("signin.html"))
+		t.Execute(w, nil)
+	}
+}
 
 func main() {
 	http.HandleFunc("/", handler)
 	http.HandleFunc("/signup", signupAction)
+	http.HandleFunc("/signin", signinAction)
 	http.ListenAndServe(":3000", nil)
 }
