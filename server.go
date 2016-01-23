@@ -64,6 +64,30 @@ func signupAction(w http.ResponseWriter, r *http.Request) {
 }
 func signinAction(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
+		r.ParseForm()
+
+		db, err := genmai.New(&genmai.SQLite3Dialect{}, "./development.db")
+		if err != nil {
+			panic(err)
+		}
+		defer db.Close()
+
+		var users []Users
+
+		err = db.Select(&users,
+			db.Where(
+				"name", "=", r.Form["username"][0]).And(
+					db.Where("password", "=", r.Form["password"][0])))
+		if err != nil {
+			panic(err)
+		}
+
+		if len(users) == 1 {
+			fmt.Println("found", users)
+		} else {
+			fmt.Println("not found")
+		}
+
 	} else {
 		t := template.Must(template.ParseFiles("signin.html"))
 		t.Execute(w, nil)
