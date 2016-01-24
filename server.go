@@ -7,6 +7,7 @@ import (
 	"time"
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/naoina/genmai"
+	"github.com/gorilla/sessions"
 )
 
 type Page struct {
@@ -20,6 +21,8 @@ type Users struct {
 	CreatedAt *time.Time
 	UpdatedAt *time.Time
 }
+
+var store = sessions.NewCookieStore([]byte("goblo-session"))
 
 func handler(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
@@ -83,7 +86,15 @@ func signinAction(w http.ResponseWriter, r *http.Request) {
 		}
 
 		if len(users) == 1 {
-			fmt.Println("found", users)
+			session, err := store.Get(r, "goblo-session")
+			if err != nil {
+				http.Error(w, err.Error(), 500)
+				return
+			}
+
+			session.Values["uid"] = users[0].Id
+			session.Save(r, w)
+			http.Redirect(w, r, "/", 301)
 		} else {
 			fmt.Println("not found")
 		}
