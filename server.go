@@ -24,7 +24,7 @@ type Users struct {
 
 var store = sessions.NewCookieStore([]byte("goblo-session"))
 
-func handler(w http.ResponseWriter, r *http.Request) {
+func topAction(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	if r.Method == "POST" {
 		fmt.Println("body", r.Form)
@@ -106,7 +106,7 @@ func signinAction(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	http.HandleFunc("/", handler)
+	http.HandleFunc("/", topAction)
 	http.HandleFunc("/signup", signupAction)
 	http.HandleFunc("/signin", signinAction)
 	http.ListenAndServe(":3000", nil)
