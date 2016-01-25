@@ -25,15 +25,19 @@ type Users struct {
 var store = sessions.NewCookieStore([]byte("goblo-session"))
 
 func topAction(w http.ResponseWriter, r *http.Request) {
-	r.ParseForm()
-	if r.Method == "POST" {
-		fmt.Println("body", r.Form)
-		fmt.Println("username:", r.Form["username"])
-		fmt.Println("password:", r.Form["password"])
+	session, err := store.Get(r, "goblo-session")
+	if err != nil {
+		http.Error(w, err.Error(), 500)
+		return
+	}
+
+	uid := session.Values["uid"]
+
+	if uid == nil {
+		http.Redirect(w, r, "/signin", 301)
 	} else {
-		p := Page{"title"}
 		t := template.Must(template.ParseFiles("top.html"))
-		t.Execute(w, p)
+		t.Execute(w, uid)
 	}
 }
 
