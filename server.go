@@ -15,7 +15,7 @@ type Page struct {
 }
 
 type Users struct {
-	Id int64
+	Id int64 `db:"pk"`
 	Name string
 	Password string
 	CreatedAt *time.Time
