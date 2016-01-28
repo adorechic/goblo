@@ -41,6 +41,18 @@ func topAction(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func signoutAction(w http.ResponseWriter, r *http.Request) {
+	session, err := store.Get(r, "goblo-session")
+	if err != nil {
+		http.Error(w, err.Error(), 500)
+		return
+	}
+	delete(session.Values, "uid")
+	session.Save(r, w)
+
+	http.Redirect(w, r, "/", 301)
+}
+
 func signupAction(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 		r.ParseForm()
@@ -113,5 +125,6 @@ func main() {
 	http.HandleFunc("/", topAction)
 	http.HandleFunc("/signup", signupAction)
 	http.HandleFunc("/signin", signinAction)
+	http.HandleFunc("/signout", signoutAction)
 	http.ListenAndServe(":3000", nil)
 }
