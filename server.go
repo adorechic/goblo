@@ -10,10 +10,6 @@ import (
 	"github.com/gorilla/sessions"
 )
 
-type Page struct {
-	Title string
-}
-
 type Users struct {
 	Id int64 `db:"pk"`
 	Name string
