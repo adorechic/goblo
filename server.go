@@ -24,19 +24,11 @@ func topAction(w http.ResponseWriter, r *http.Request) {
 	if uid == nil {
 		http.Redirect(w, r, "/signin", 301)
 	} else {
-		db, err := genmai.New(&genmai.SQLite3Dialect{}, "./development.db")
+		user, err := findUser(int(uid.(int64)))
 		if err != nil {
-			panic(err)
+			http.Error(w, err.Error(), 500)
+			return
 		}
-		defer db.Close()
-
-		var users []Users
-
-		err = db.Select(&users, db.Where("id", "=", uid))
-		if err != nil {
-			panic(err)
-		}
-		user := users[0]
 
 		t := template.Must(template.ParseFiles("top.html"))
 		t.Execute(w, user)
