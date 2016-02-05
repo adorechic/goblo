@@ -79,35 +79,22 @@ func signinAction(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 		r.ParseForm()
 
-		db, err := genmai.New(&genmai.SQLite3Dialect{}, "./development.db")
-		if err != nil {
-			panic(err)
-		}
-		defer db.Close()
+		user, err := findUserByCredential(r.Form["username"][0], r.Form["password"][0])
 
-		var users []Users
-
-		err = db.Select(&users,
-			db.Where(
-				"name", "=", r.Form["username"][0]).And(
-					db.Where("password", "=", r.Form["password"][0])))
 		if err != nil {
+			//TODO handle
 			panic(err)
 		}
 
-		if len(users) == 1 {
-			session, err := store.Get(r, "goblo-session")
-			if err != nil {
-				http.Error(w, err.Error(), 500)
-				return
-			}
-
-			session.Values["uid"] = users[0].Id
-			session.Save(r, w)
-			http.Redirect(w, r, "/", 301)
-		} else {
-			fmt.Println("not found")
+		session, err := store.Get(r, "goblo-session")
+		if err != nil {
+			http.Error(w, err.Error(), 500)
+			return
 		}
+
+		session.Values["uid"] = user.Id
+		session.Save(r, w)
+		http.Redirect(w, r, "/", 301)
 
 	} else {
 		t := template.Must(template.ParseFiles("signin.html"))
