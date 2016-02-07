@@ -4,9 +4,6 @@ import (
 	"net/http"
 	"html/template"
 	"fmt"
-	"time"
-	_ "github.com/mattn/go-sqlite3"
-	"github.com/naoina/genmai"
 	"github.com/gorilla/sessions"
 )
 
@@ -51,25 +48,15 @@ func signupAction(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 		r.ParseForm()
 
-		db, err := genmai.New(&genmai.SQLite3Dialect{}, "./development.db")
+		err := createUser(r.Form["username"][0], r.Form["password"][0])
 		if err != nil {
-			panic(err)
+			http.Error(w, err.Error(), 500)
+			return
 		}
-		defer db.Close()
 
-		t := time.Now()
+		//TODO redirect or compile view
+		fmt.Println("insert:")
 
-		obj := &Users{
-			Name: r.Form["username"][0],
-		  Password: r.Form["password"][0],
-			CreatedAt: &t,
-			UpdatedAt: &t,
-		}
-		n, err := db.Insert(obj)
-		if err != nil {
-			panic(err)
-		}
-		fmt.Println("insert:", n)
 	} else {
 		t := template.Must(template.ParseFiles("signup.html"))
 		t.Execute(w, nil)

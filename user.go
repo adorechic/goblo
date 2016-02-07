@@ -3,6 +3,7 @@ package main
 import (
 	"time"
 	"github.com/naoina/genmai"
+	_ "github.com/mattn/go-sqlite3"
 	"errors"
 )
 
@@ -53,4 +54,27 @@ func findUserByCredential(username, password string) (*Users, error) {
 	} else {
 		return nil, errors.New("Invalid Credential")
 	}
+}
+
+func createUser(username, password string) error {
+	db, err := genmai.New(&genmai.SQLite3Dialect{}, "./development.db")
+	if err != nil {
+		return err
+	}
+	defer db.Close()
+
+	t := time.Now()
+
+	user := &Users{
+		Name: username,
+		Password: password,
+		CreatedAt: &t,
+		UpdatedAt: &t,
+	}
+	_, err = db.Insert(user)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
