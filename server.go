@@ -4,29 +4,13 @@ import (
 	"net/http"
 	"html/template"
 	"fmt"
-	"github.com/gorilla/sessions"
 )
 
-var store = sessions.NewCookieStore([]byte("goblo-session"))
-
 func topAction(w http.ResponseWriter, r *http.Request) {
-	session, err := store.Get(r, "goblo-session")
+	user, err := currentUser(r)
 	if err != nil {
-		http.Error(w, err.Error(), 500)
-		return
-	}
-
-	uid := session.Values["uid"]
-
-	if uid == nil {
 		http.Redirect(w, r, "/signin", 301)
 	} else {
-		user, err := findUser(int(uid.(int64)))
-		if err != nil {
-			http.Error(w, err.Error(), 500)
-			return
-		}
-
 		t := template.Must(template.ParseFiles("top.html"))
 		t.Execute(w, user)
 	}
