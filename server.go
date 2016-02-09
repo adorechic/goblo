@@ -17,15 +17,12 @@ func topAction(w http.ResponseWriter, r *http.Request) {
 }
 
 func signoutAction(w http.ResponseWriter, r *http.Request) {
-	session, err := store.Get(r, "goblo-session")
-	if err != nil {
+	err := clearSession(w, r)
+	if err == nil {
+		http.Redirect(w, r, "/", 301)
+	} else {
 		http.Error(w, err.Error(), 500)
-		return
 	}
-	delete(session.Values, "uid")
-	session.Save(r, w)
-
-	http.Redirect(w, r, "/", 301)
 }
 
 func signupAction(w http.ResponseWriter, r *http.Request) {
