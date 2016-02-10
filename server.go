@@ -54,14 +54,12 @@ func signinAction(w http.ResponseWriter, r *http.Request) {
 			panic(err)
 		}
 
-		session, err := store.Get(r, "goblo-session")
+		err = createSession(user, w, r)
 		if err != nil {
 			http.Error(w, err.Error(), 500)
 			return
 		}
 
-		session.Values["uid"] = user.Id
-		session.Save(r, w)
 		http.Redirect(w, r, "/", 301)
 
 	} else {

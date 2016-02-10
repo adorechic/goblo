@@ -28,6 +28,16 @@ func currentUser(r *http.Request) (*Users, error) {
 	return user, nil
 }
 
+func createSession(user *Users, w http.ResponseWriter, r *http.Request) error {
+	session, err := store.Get(r, "goblo-session")
+	if err != nil {
+		return err
+	}
+	session.Values["uid"] = user.Id
+	session.Save(r, w)
+	return nil
+}
+
 func clearSession(w http.ResponseWriter, r *http.Request) error {
 	session, err := store.Get(r, "goblo-session")
 	if err != nil {
