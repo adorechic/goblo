@@ -26,46 +26,46 @@ func signoutAction(w http.ResponseWriter, r *http.Request) {
 }
 
 func signupAction(w http.ResponseWriter, r *http.Request) {
-	if r.Method == "POST" {
-		r.ParseForm()
-
-		err := createUser(r.Form["username"][0], r.Form["password"][0])
-		if err != nil {
-			http.Error(w, err.Error(), 500)
-			return
-		}
-
-		//TODO redirect or compile view
-		fmt.Println("insert:")
-
-	} else {
+	if r.Method != "POST" {
 		t := template.Must(template.ParseFiles("signup.html"))
 		t.Execute(w, nil)
+		return
 	}
+
+	r.ParseForm()
+
+	err := createUser(r.Form["username"][0], r.Form["password"][0])
+	if err != nil {
+		http.Error(w, err.Error(), 500)
+		return
+	}
+
+	//TODO redirect or compile view
+	fmt.Println("insert:")
 }
 func signinAction(w http.ResponseWriter, r *http.Request) {
-	if r.Method == "POST" {
-		r.ParseForm()
-
-		user, err := findUserByCredential(r.Form["username"][0], r.Form["password"][0])
-
-		if err != nil {
-			//TODO handle
-			panic(err)
-		}
-
-		err = createSession(user, w, r)
-		if err != nil {
-			http.Error(w, err.Error(), 500)
-			return
-		}
-
-		http.Redirect(w, r, "/", 301)
-
-	} else {
+	if r.Method != "POST" {
 		t := template.Must(template.ParseFiles("signin.html"))
 		t.Execute(w, nil)
+		return
 	}
+
+	r.ParseForm()
+
+	user, err := findUserByCredential(r.Form["username"][0], r.Form["password"][0])
+
+	if err != nil {
+		//TODO handle
+		panic(err)
+	}
+
+	err = createSession(user, w, r)
+	if err != nil {
+		http.Error(w, err.Error(), 500)
+		return
+	}
+
+	http.Redirect(w, r, "/", 301)
 }
 
 func main() {
