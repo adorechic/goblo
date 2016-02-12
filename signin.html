@@ -4,6 +4,7 @@
   </head>
   <body>
     <h1>Signin</h1>
+    {{if .}}<ul><li>{{.}}</li></ul>{{end}}
     <form action="/signin" method="post">
       username:<input type="text" name="username">
       password:<input type="password" name="password">

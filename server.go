@@ -55,13 +55,15 @@ func signinAction(w http.ResponseWriter, r *http.Request) {
 	user, err := findUserByCredential(r.Form["username"][0], r.Form["password"][0])
 
 	if err != nil {
-		//TODO handle
-		panic(err)
+		t := template.Must(template.ParseFiles("signin.html"))
+		t.Execute(w, "Invalid credentials.")
+		return
 	}
 
 	err = createSession(user, w, r)
 	if err != nil {
-		http.Error(w, err.Error(), 500)
+		t := template.Must(template.ParseFiles("signin.html"))
+		t.Execute(w, "Invalid credentials.")
 		return
 	}
 
