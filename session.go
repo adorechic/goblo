@@ -47,3 +47,23 @@ func clearSession(w http.ResponseWriter, r *http.Request) error {
 	session.Save(r, w)
 	return nil
 }
+
+func setFlash(w http.ResponseWriter, r *http.Request, message string) error {
+	session, err := store.Get(r, "goblo-session")
+	if err != nil {
+		return err
+	}
+	session.AddFlash(message)
+	session.Save(r, w)
+	return nil
+}
+
+func flashMessages(r *http.Request) ([]interface{}, error) {
+	session, err := store.Get(r, "goblo-session")
+	if err != nil {
+		return nil, err
+	}
+
+	messages := session.Flashes()
+	return messages, nil
+}

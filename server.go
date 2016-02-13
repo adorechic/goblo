@@ -3,7 +3,6 @@ package main
 import (
 	"net/http"
 	"html/template"
-	"fmt"
 )
 
 func topAction(w http.ResponseWriter, r *http.Request) {
@@ -40,13 +39,25 @@ func signupAction(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	//TODO redirect or compile view
-	fmt.Println("insert:")
+	setFlash(w, r, "Account has created.")
+	http.Redirect(w, r, "/signin", 301)
+	return
+
 }
 func signinAction(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {
+		messages, err := flashMessages(r)
+		if err != nil {
+			http.Error(w, err.Error(), 500)
+			return
+		}
 		t := template.Must(template.ParseFiles("signin.html"))
-		t.Execute(w, nil)
+
+		if len(messages) > 0 {
+			t.Execute(w, messages[0])
+		} else {
+			t.Execute(w, nil)
+		}
 		return
 	}
 
