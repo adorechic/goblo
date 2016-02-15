@@ -28,6 +28,20 @@ func currentUser(r *http.Request) (*Users, error) {
 	return user, nil
 }
 
+func signin(w http.ResponseWriter, r *http.Request, username, password string) error {
+	user, err := findUserByCredential(username, password)
+	if err != nil {
+		return err
+	}
+
+	err = createSession(user, w, r)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func createSession(user *Users, w http.ResponseWriter, r *http.Request) error {
 	session, err := store.Get(r, "goblo-session")
 	if err != nil {
