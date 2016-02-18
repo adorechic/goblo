@@ -1,9 +1,4 @@
-<html>
-  <head>
-    <title></title>
-  </head>
-  <body>
-    <h1>Hello, {{.Name |html|}}</h1>
-    <a href="/signout">signout</a>
-  </body>
-</html>
+{{ define "content" }}
+<h1>Hello, {{.Name |html|}}</h1>
+<a href="/signout">signout</a>
+{{ end }}
