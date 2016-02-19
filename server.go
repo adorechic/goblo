@@ -10,7 +10,7 @@ func topAction(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		http.Redirect(w, r, "/signin", 301)
 	} else {
-		t := template.Must(template.ParseFiles("layout.html", "top.html"))
+		t := template.Must(template.ParseFiles("views/layout.html", "views/top.html"))
 		t.Execute(w, user)
 	}
 }
