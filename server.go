@@ -55,12 +55,11 @@ func signinAction(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), 500)
 			return
 		}
-		t := template.Must(template.ParseFiles("signin.html"))
 
 		if len(messages) > 0 {
-			t.Execute(w, messages[0])
+			render(w, "signin", messages[0])
 		} else {
-			t.Execute(w, nil)
+			render(w, "signin", nil)
 		}
 		return
 	}
@@ -70,8 +69,7 @@ func signinAction(w http.ResponseWriter, r *http.Request) {
 	err := signin(w, r, r.Form["username"][0], r.Form["password"][0])
 
 	if err != nil {
-		t := template.Must(template.ParseFiles("signin.html"))
-		t.Execute(w, "Invalid credentials.")
+		render(w, "signin", "Invalid credentials.")
 		return
 	}
 
