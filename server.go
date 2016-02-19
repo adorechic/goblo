@@ -5,13 +5,17 @@ import (
 	"html/template"
 )
 
+func render(w http.ResponseWriter, name string, data interface{}) {
+	t := template.Must(template.ParseFiles("views/layout.html", "views/" + name + ".html"))
+	t.Execute(w, data)
+}
+
 func topAction(w http.ResponseWriter, r *http.Request) {
 	user, err := currentUser(r)
 	if err != nil {
 		http.Redirect(w, r, "/signin", 301)
 	} else {
-		t := template.Must(template.ParseFiles("views/layout.html", "views/top.html"))
-		t.Execute(w, user)
+		render(w, "top", user)
 	}
 }
 
