@@ -30,8 +30,7 @@ func signoutAction(w http.ResponseWriter, r *http.Request) {
 
 func signupAction(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {
-		t := template.Must(template.ParseFiles("signup.html"))
-		t.Execute(w, nil)
+		render(w, "signup", nil)
 		return
 	}
 
