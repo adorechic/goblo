@@ -5,6 +5,11 @@ import (
 	"html/template"
 )
 
+type ViewObject struct {
+	CurrentUser *Users
+	Error string
+}
+
 func render(w http.ResponseWriter, name string, data interface{}) {
 	t := template.Must(template.ParseFiles("views/layout.html", "views/" + name + ".html"))
 	t.Execute(w, data)
@@ -15,7 +20,8 @@ func topAction(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		http.Redirect(w, r, "/signin", 301)
 	} else {
-		render(w, "top", user)
+		o := ViewObject{CurrentUser: user}
+		render(w, "top", o)
 	}
 }
 
@@ -30,7 +36,8 @@ func signoutAction(w http.ResponseWriter, r *http.Request) {
 
 func signupAction(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {
-		render(w, "signup", nil)
+		o := ViewObject{}
+		render(w, "signup", o)
 		return
 	}
 
@@ -55,11 +62,11 @@ func signinAction(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
+		o := ViewObject{}
 		if len(messages) > 0 {
-			render(w, "signin", messages[0])
-		} else {
-			render(w, "signin", nil)
+			o.Error = messages[0].(string)
 		}
+		render(w, "signin", o)
 		return
 	}
 
@@ -68,7 +75,8 @@ func signinAction(w http.ResponseWriter, r *http.Request) {
 	err := signin(w, r, r.Form["username"][0], r.Form["password"][0])
 
 	if err != nil {
-		render(w, "signin", "Invalid credentials.")
+		o := ViewObject{Error: "Invalid credentials."}
+		render(w, "signin", o)
 		return
 	}
 

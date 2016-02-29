@@ -1,6 +1,6 @@
 {{ define "content" }}
 
-{{if .}}<ul><li>{{.}}</li></ul>{{end}}
+{{if .Error}}<ul><li>{{.Error}}</li></ul>{{end}}
 <div class="container">
 <h1>Signin</h1>
 <form action="/signin" method="post" class="form-horizonal">
