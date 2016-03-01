@@ -19,7 +19,11 @@
         </div>
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav navbar-right">
+            {{if .CurrentUser}}
+            <li><a href="/signout">Signout</a></li>
+            {{else}}
             <li><a href="/signup">Signup</a></li>
+            {{end}}
           </ul>
         </div>
       </div>
