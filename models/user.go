@@ -1,4 +1,4 @@
-package main
+package models
 
 import (
 	"time"
@@ -15,7 +15,7 @@ type Users struct {
 	UpdatedAt *time.Time
 }
 
-func findUser(id int) (*Users, error) {
+func FindUser(id int) (*Users, error) {
 	db, err := genmai.New(&genmai.SQLite3Dialect{}, "./development.db")
 	if err != nil {
 		return nil, err
@@ -32,7 +32,7 @@ func findUser(id int) (*Users, error) {
 	return &users[0], nil
 }
 
-func findUserByCredential(username, password string) (*Users, error) {
+func FindUserByCredential(username, password string) (*Users, error) {
 	db, err := genmai.New(&genmai.SQLite3Dialect{}, "./development.db")
 	if err != nil {
 		return nil, err
@@ -56,7 +56,7 @@ func findUserByCredential(username, password string) (*Users, error) {
 	}
 }
 
-func createUser(username, password string) error {
+func CreateUser(username, password string) error {
 	db, err := genmai.New(&genmai.SQLite3Dialect{}, "./development.db")
 	if err != nil {
 		return err

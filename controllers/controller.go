@@ -1,14 +1,26 @@
-package main
+package controllers
 
 import (
-	"net/http"
-	"github.com/gorilla/sessions"
 	"errors"
+	"net/http"
+	"html/template"
+	"github.com/gorilla/sessions"
+	"github.com/adorechic/goblo/models"
 )
 
 var store = sessions.NewCookieStore([]byte("goblo-session"))
 
-func currentUser(r *http.Request) (*Users, error) {
+type ViewObject struct {
+	CurrentUser *models.Users
+	Error string
+}
+
+func render(w http.ResponseWriter, name string, data interface{}) {
+	t := template.Must(template.ParseFiles("views/layout.html", "views/" + name + ".html"))
+	t.Execute(w, data)
+}
+
+func currentUser(r *http.Request) (*models.Users, error) {
 	session, err := store.Get(r, "goblo-session")
 	if err != nil {
 		return nil, err
@@ -20,7 +32,7 @@ func currentUser(r *http.Request) (*Users, error) {
 		return nil, errors.New("Empty session")
 	}
 
-	user, err := findUser(int(uid.(int64)))
+	user, err := models.FindUser(int(uid.(int64)))
 	if err != nil {
 		return nil, err
 	}
@@ -29,7 +41,7 @@ func currentUser(r *http.Request) (*Users, error) {
 }
 
 func signin(w http.ResponseWriter, r *http.Request, username, password string) error {
-	user, err := findUserByCredential(username, password)
+	user, err := models.FindUserByCredential(username, password)
 	if err != nil {
 		return err
 	}
@@ -42,7 +54,7 @@ func signin(w http.ResponseWriter, r *http.Request, username, password string) e
 	return nil
 }
 
-func createSession(user *Users, w http.ResponseWriter, r *http.Request) error {
+func createSession(user *models.Users, w http.ResponseWriter, r *http.Request) error {
 	session, err := store.Get(r, "goblo-session")
 	if err != nil {
 		return err
