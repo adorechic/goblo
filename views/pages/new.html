@@ -1,0 +1,31 @@
+{{ define "content" }}
+
+{{if .Error}}<ul><li>{{.Error}}</li></ul>{{end}}
+<div class="container">
+<h1>New Page</h1>
+<form action="/pages" method="post" class="form-horizonal">
+  <div class="row">
+    <div class="form-group">
+      <label for="title" class="col-sm-1">title</label>
+      <div class="col-sm-9">
+        <input type="text" name="title" class="form-control">
+      </div>
+    </div>
+    <div class="col-sm-2"></div>
+  </div>
+  <div class="row">
+    <div class="form-group">
+      <label for="body" class="col-sm-1">body</label>
+      <div class="col-sm-9">
+        <textarea name="body" class="form-control" rows="3"></textarea>
+      </div>
+    </div>
+    <div class="col-sm-2"></div>
+  </div>
+  <div class="row">
+    <button type="submit" class="btn btn-default">Save</button>
+  </div>
+</form>
+</div>
+
+{{ end }}
