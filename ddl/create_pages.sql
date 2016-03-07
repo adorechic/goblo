@@ -1,0 +1,7 @@
+CREATE TABLE `pages` (
+  `id` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `title` VARCHAR(255) NOT NULL,
+  `body` TEXT NOT NULL,
+  `created_at` TIMESTAMP NOT NULL,
+  `updated_at` TIMESTAMP NOT NULL
+);
