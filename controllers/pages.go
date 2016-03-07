@@ -10,6 +10,6 @@ func NewPage(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/signin", 301)
 	} else {
 		o := ViewObject{CurrentUser: user}
-		render(w, "pages/new", o)
+		render(w, "pages", o)
 	}
 }
