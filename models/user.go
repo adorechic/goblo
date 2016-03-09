@@ -2,7 +2,6 @@ package models
 
 import (
 	"time"
-	"github.com/naoina/genmai"
 	_ "github.com/mattn/go-sqlite3"
 	"errors"
 )
@@ -16,7 +15,7 @@ type Users struct {
 }
 
 func FindUser(id int) (*Users, error) {
-	db, err := genmai.New(&genmai.SQLite3Dialect{}, "./development.db")
+	db, err := connect()
 	if err != nil {
 		return nil, err
 	}
@@ -33,7 +32,7 @@ func FindUser(id int) (*Users, error) {
 }
 
 func FindUserByCredential(username, password string) (*Users, error) {
-	db, err := genmai.New(&genmai.SQLite3Dialect{}, "./development.db")
+	db, err := connect()
 	if err != nil {
 		return nil, err
 	}
@@ -57,7 +56,7 @@ func FindUserByCredential(username, password string) (*Users, error) {
 }
 
 func CreateUser(username, password string) error {
-	db, err := genmai.New(&genmai.SQLite3Dialect{}, "./development.db")
+	db, err := connect()
 	if err != nil {
 		return err
 	}
