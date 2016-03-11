@@ -6,7 +6,7 @@ import (
 	"errors"
 )
 
-type Users struct {
+type User struct {
 	Id int64 `db:"pk"`
 	Name string
 	Password string
@@ -14,14 +14,18 @@ type Users struct {
 	UpdatedAt *time.Time
 }
 
-func FindUser(id int) (*Users, error) {
+func (u *User) TableName() string {
+	return "users"
+}
+
+func FindUser(id int) (*User, error) {
 	db, err := connect()
 	if err != nil {
 		return nil, err
 	}
 	defer db.Close()
 
-	var users []Users
+	var users []User
 
 	err = db.Select(&users, db.Where("id", "=", id))
 	if err != nil {
@@ -31,14 +35,14 @@ func FindUser(id int) (*Users, error) {
 	return &users[0], nil
 }
 
-func FindUserByCredential(username, password string) (*Users, error) {
+func FindUserByCredential(username, password string) (*User, error) {
 	db, err := connect()
 	if err != nil {
 		return nil, err
 	}
 
 	defer db.Close()
-	var users []Users
+	var users []User
 
 	err = db.Select(&users,
 		db.Where("name", "=", username).And(
@@ -64,7 +68,7 @@ func CreateUser(username, password string) error {
 
 	t := time.Now()
 
-	user := &Users{
+	user := &User{
 		Name: username,
 		Password: password,
 		CreatedAt: &t,

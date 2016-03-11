@@ -11,7 +11,7 @@ import (
 var store = sessions.NewCookieStore([]byte("goblo-session"))
 
 type ViewObject struct {
-	CurrentUser *models.Users
+	CurrentUser *models.User
 	Error string
 }
 
@@ -20,7 +20,7 @@ func render(w http.ResponseWriter, name string, data interface{}) {
 	t.Execute(w, data)
 }
 
-func currentUser(r *http.Request) (*models.Users, error) {
+func currentUser(r *http.Request) (*models.User, error) {
 	session, err := store.Get(r, "goblo-session")
 	if err != nil {
 		return nil, err
@@ -54,7 +54,7 @@ func signin(w http.ResponseWriter, r *http.Request, username, password string) e
 	return nil
 }
 
-func createSession(user *models.Users, w http.ResponseWriter, r *http.Request) error {
+func createSession(user *models.User, w http.ResponseWriter, r *http.Request) error {
 	session, err := store.Get(r, "goblo-session")
 	if err != nil {
 		return err
