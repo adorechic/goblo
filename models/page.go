@@ -31,7 +31,7 @@ func CreatePage(title, body string) error {
 		CreatedAt: &t,
 		UpdatedAt: &t,
 	}
-	-, err = db..Insert(page)
+	_, err = db.Insert(page)
 	if err != nil {
 		return err
 	}
