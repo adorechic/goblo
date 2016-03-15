@@ -29,3 +29,17 @@ func NewPage(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/page/" + title, 301)
 	return
 }
+
+func ShowPage(w http.ResponseWriter, r *http.Request) {
+	user, err := currentUser(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", 301)
+		return
+	}
+
+	page, err := models.FindPage(r.URL.Path)
+	if err != nil {
+		http.Error(w, err.Error(), 500)
+		return
+	}
+}
