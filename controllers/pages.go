@@ -26,7 +26,7 @@ func NewPage(w http.ResponseWriter, r *http.Request) {
 	}
 
 	setFlash(w, r, "Page has created.")
-	http.Redirect(w, r, "/page/" + title, 301)
+	http.Redirect(w, r, "/pages/" + title, 301)
 	return
 }
 
