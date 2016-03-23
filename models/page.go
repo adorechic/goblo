@@ -38,3 +38,20 @@ func CreatePage(title, body string) error {
 
 	return nil
 }
+
+func FindPage(title string) (*Page, error) {
+	db, err := connect()
+	if err != nil {
+		return nil, err
+	}
+	defer db.Close()
+
+	var pages []Page
+
+	err = db.Select(&pages, db.Where("title", "=", title))
+	if err != nil {
+		return nil, err
+	}
+
+	return &pages[0], nil
+}

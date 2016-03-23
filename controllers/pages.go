@@ -43,12 +43,6 @@ func ShowPage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	page, err := models.FindPage(r.URL.Path)
-	if err != nil {
-		http.Error(w, err.Error(), 500)
-		return
-	}
-
 	o := ViewObject{CurrentUser: user, Page: page}
 	render(w, "pages", o)
 }
