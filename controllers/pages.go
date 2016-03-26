@@ -19,6 +19,8 @@ func NewPage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	r.ParseForm()
+
 	title, body := r.Form["title"][0], r.Form["body"][0]
 	err = models.CreatePage(title, body)
 	if err != nil {
