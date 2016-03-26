@@ -15,7 +15,7 @@ func NewPage(w http.ResponseWriter, r *http.Request) {
 
 	if r.Method != "POST" {
 		o := ViewObject{CurrentUser: user}
-		render(w, "pages", o)
+		render(w, "new_pages", o)
 		return
 	}
 
