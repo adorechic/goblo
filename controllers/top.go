@@ -2,7 +2,10 @@ package controllers
 
 import (
 	"net/http"
+	"regexp"
 )
+
+var url_pattern = regexp.MustCompile(`\A/pages/*`)
 
 func Top(w http.ResponseWriter, r *http.Request) {
 	user, err := currentUser(r)
@@ -11,6 +14,10 @@ func Top(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	o := ViewObject{CurrentUser: user}
-	render(w, "top", o)
+	if url_pattern.MatchString(r.URL.Path) {
+		ShowPage(w, r)
+	} else {
+		o := ViewObject{CurrentUser: user}
+		render(w, "top", o)
+	}
 }
