@@ -46,7 +46,8 @@ func ShowPage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	o := ViewObject{CurrentUser: user, Page: page}
+	pages := []*models.Page{page}
+	o := ViewObject{CurrentUser: user, Pages: pages}
 	render(w, "pages", o)
 }
 

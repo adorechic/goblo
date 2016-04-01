@@ -1,8 +1,10 @@
 {{ define "content" }}
+{{ with $page := index .Pages 0 }}
 <div class="container">
-  <h2>{{.Page.Title}}</h2>
+  <h2>{{$page.Title}}</h2>
   <div>
-    {{.Page.Body}}
+    {{$page.Body}}
   </div>
 </div>
+{{ end }}
 {{ end }}
