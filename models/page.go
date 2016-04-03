@@ -55,3 +55,20 @@ func FindPage(title string) (*Page, error) {
 
 	return &pages[0], nil
 }
+
+func AllPage() (*[]Page, error) {
+	db, err := connect()
+	if err != nil {
+		return nil, err
+	}
+	defer db.Close()
+
+	var pages []Page
+
+	err = db.Select(&pages)
+	if err != nil {
+		return nil, err
+	}
+
+	return &pages, nil
+}

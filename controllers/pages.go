@@ -46,8 +46,8 @@ func ShowPage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	pages := []*models.Page{page}
-	o := ViewObject{CurrentUser: user, Pages: pages}
+	pages := []models.Page{*page}
+	o := ViewObject{CurrentUser: user, Pages: &pages}
 	render(w, "pages", o)
 }
 
@@ -58,7 +58,12 @@ func IndexPage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	o := ViewObject{CurrentUser: user}
-	render(w, "page_index", o)
+	pages, err := models.AllPage()
+	if err != nil {
+		http.Error(w, err.Error(), 500)
+		return
+	}
 
+	o := ViewObject{CurrentUser: user, Pages: pages}
+	render(w, "page_index", o)
 }

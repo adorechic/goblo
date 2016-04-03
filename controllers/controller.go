@@ -12,7 +12,7 @@ var store = sessions.NewCookieStore([]byte("goblo-session"))
 
 type ViewObject struct {
 	CurrentUser *models.User
-	Pages []*models.Page
+	Pages *[]models.Page
 	Error string
 }
 
