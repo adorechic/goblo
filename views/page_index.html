@@ -1,7 +1,9 @@
 {{ define "content" }}
-<ul>
+<table class="table table-striped">
   {{ range .Pages }}
-  <li>{{ .Title }}</li>
+  <tr>
+    <td><a href="/pages/{{ .Title }}">{{ .Title }}</a></td>
+  </tr>
   {{ end }}
-</ul>
+</table>
 {{ end }}
