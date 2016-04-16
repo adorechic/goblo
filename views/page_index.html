@@ -1,8 +1,13 @@
 {{ define "content" }}
 <table class="table table-striped">
+  <tr>
+    <th>Title</th>
+    <th>Updated</th>
+  </tr>
   {{ range .Pages }}
   <tr>
     <td><a href="/pages/{{ .Title }}">{{ .Title }}</a></td>
+    <td>{{ .CreatedAt }}</td>
   </tr>
   {{ end }}
 </table>
