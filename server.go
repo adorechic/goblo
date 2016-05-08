@@ -2,15 +2,19 @@ package main
 
 import (
 	"net/http"
+	"github.com/gorilla/mux"
 	"github.com/adorechic/goblo/controllers"
 )
 
 func main() {
-	http.HandleFunc("/", controllers.Top)
-	http.HandleFunc("/signup", controllers.Signup)
-	http.HandleFunc("/signin", controllers.Signin)
-	http.HandleFunc("/signout", controllers.Signout)
-	http.HandleFunc("/pages", controllers.IndexPage)
-	http.HandleFunc("/newpage", controllers.NewPage)
+	r := mux.NewRouter()
+	r.HandleFunc("/", controllers.Top)
+	r.HandleFunc("/signup", controllers.Signup)
+	r.HandleFunc("/signin", controllers.Signin)
+	r.HandleFunc("/signout", controllers.Signout)
+	r.HandleFunc("/pages", controllers.IndexPage)
+	r.HandleFunc("/pages/{title}", controllers.ShowPage)
+	r.HandleFunc("/newpage", controllers.NewPage)
+	http.Handle("/", r)
 	http.ListenAndServe(":3000", nil)
 }

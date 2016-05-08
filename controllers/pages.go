@@ -3,7 +3,7 @@ package controllers
 import (
 	"net/http"
 	"github.com/adorechic/goblo/models"
-	"strings"
+	"github.com/gorilla/mux"
 )
 
 func NewPage(w http.ResponseWriter, r *http.Request) {
@@ -40,7 +40,9 @@ func ShowPage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	page, err := models.FindPage(strings.Replace(r.URL.Path, "/pages/", "", 1))
+	vars := mux.Vars(r)
+
+	page, err := models.FindPage(vars["title"])
 	if err != nil {
 		http.Error(w, err.Error(), 500)
 		return
