@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"github.com/gorilla/mux"
 	"github.com/adorechic/goblo/controllers"
+	"github.com/codegangsta/negroni"
 )
 
 func main() {
@@ -15,6 +16,9 @@ func main() {
 	r.HandleFunc("/pages", controllers.IndexPage)
 	r.HandleFunc("/pages/{title}", controllers.ShowPage)
 	r.HandleFunc("/newpage", controllers.NewPage)
-	http.Handle("/", r)
-	http.ListenAndServe(":3000", nil)
+
+	n := negroni.Classic()
+	n.UseHandler(r)
+
+	http.ListenAndServe(":3000", n)
 }
