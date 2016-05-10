@@ -53,6 +53,26 @@ func ShowPage(w http.ResponseWriter, r *http.Request) {
 	render(w, "pages", o)
 }
 
+func EditPage(w http.ResponseWriter, r *http.Request) {
+	user, err := currentUser(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", 301)
+		return
+	}
+
+	vars := mux.Vars(r)
+
+	page, err := models.FindPage(vars["title"])
+	if err != nil {
+		http.Error(w, err.Error(), 500)
+		return
+	}
+
+	pages := []models.Page{*page}
+	o := ViewObject{CurrentUser: user, Pages: &pages}
+	render(w, "edit_pages", o)
+}
+
 func IndexPage(w http.ResponseWriter, r *http.Request) {
 	user, err := currentUser(r)
 	if err != nil {
