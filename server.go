@@ -1,10 +1,10 @@
 package main
 
 import (
-	"net/http"
-	"github.com/gorilla/mux"
 	"github.com/adorechic/goblo/controllers"
 	"github.com/codegangsta/negroni"
+	"github.com/gorilla/mux"
+	"net/http"
 )
 
 func main() {

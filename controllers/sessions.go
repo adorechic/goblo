@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"net/http"
 	"github.com/adorechic/goblo/models"
+	"net/http"
 )
 
 func Signup(w http.ResponseWriter, r *http.Request) {

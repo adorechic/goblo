@@ -1,8 +1,8 @@
 package models
 
 import (
-	"github.com/naoina/genmai"
 	_ "github.com/mattn/go-sqlite3"
+	"github.com/naoina/genmai"
 )
 
 func connect() (*genmai.DB, error) {

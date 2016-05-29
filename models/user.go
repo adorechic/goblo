@@ -1,15 +1,15 @@
 package models
 
 import (
-	"time"
-	_ "github.com/mattn/go-sqlite3"
 	"errors"
+	_ "github.com/mattn/go-sqlite3"
+	"time"
 )
 
 type User struct {
-	Id int64 `db:"pk"`
-	Name string
-	Password string
+	Id        int64 `db:"pk"`
+	Name      string
+	Password  string
 	CreatedAt *time.Time
 	UpdatedAt *time.Time
 }
@@ -69,8 +69,8 @@ func CreateUser(username, password string) error {
 	t := time.Now()
 
 	user := &User{
-		Name: username,
-		Password: password,
+		Name:      username,
+		Password:  password,
 		CreatedAt: &t,
 		UpdatedAt: &t,
 	}

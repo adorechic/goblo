@@ -5,9 +5,9 @@ import (
 )
 
 type Page struct {
-	Id int64 `db:"pk"`
-	Title string
-	Body string
+	Id        int64 `db:"pk"`
+	Title     string
+	Body      string
 	CreatedAt *time.Time
 	UpdatedAt *time.Time
 }
@@ -26,8 +26,8 @@ func CreatePage(title, body string) error {
 	t := time.Now()
 
 	page := &Page{
-		Title: title,
-		Body: body,
+		Title:     title,
+		Body:      body,
 		CreatedAt: &t,
 		UpdatedAt: &t,
 	}

@@ -2,22 +2,22 @@ package controllers
 
 import (
 	"errors"
-	"net/http"
-	"html/template"
-	"github.com/gorilla/sessions"
 	"github.com/adorechic/goblo/models"
+	"github.com/gorilla/sessions"
+	"html/template"
+	"net/http"
 )
 
 var store = sessions.NewCookieStore([]byte("goblo-session"))
 
 type ViewObject struct {
 	CurrentUser *models.User
-	Pages *[]models.Page
-	Error string
+	Pages       *[]models.Page
+	Error       string
 }
 
 func render(w http.ResponseWriter, name string, data interface{}) {
-	t := template.Must(template.ParseFiles("views/layout.html", "views/" + name + ".html"))
+	t := template.Must(template.ParseFiles("views/layout.html", "views/"+name+".html"))
 	t.Execute(w, data)
 }
 
