@@ -5,12 +5,11 @@ import (
 )
 
 func Top(w http.ResponseWriter, r *http.Request) {
-	user, err := currentUser(r)
+	_, err := currentUser(r)
 	if err != nil {
 		http.Redirect(w, r, "/signin", 301)
 		return
+	} else {
+		http.Redirect(w, r, "/pages", 301)
 	}
-
-	o := ViewObject{CurrentUser: user}
-	render(w, "top", o)
 }
