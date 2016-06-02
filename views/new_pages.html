@@ -1,6 +1,7 @@
 {{ define "content" }}
 
 {{if .Error}}<ul><li>{{.Error}}</li></ul>{{end}}
+{{ with $page := index .Pages 0 }}
 <div class="container">
 <h1>New Page</h1>
 <form action="/newpage" method="post" class="form-horizonal">
@@ -8,7 +9,7 @@
     <div class="form-group">
       <label for="title" class="col-sm-1">title</label>
       <div class="col-sm-9">
-        <input type="text" name="title" class="form-control">
+        <input type="text" name="title" class="form-control" value="{{$page.Title}}">
       </div>
     </div>
     <div class="col-sm-2"></div>
@@ -17,7 +18,7 @@
     <div class="form-group">
       <label for="body" class="col-sm-1">body</label>
       <div class="col-sm-9">
-        <textarea name="body" class="form-control" rows="3"></textarea>
+        <textarea name="body" class="form-control" rows="3">{{$page.Body}}</textarea>
       </div>
     </div>
     <div class="col-sm-2"></div>
@@ -27,5 +28,5 @@
   </div>
 </form>
 </div>
-
+{{ end }}
 {{ end }}

@@ -13,23 +13,33 @@ func NewPage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	r.ParseForm()
+
+	titles, bodies := r.Form["title"], r.Form["body"]
+
 	if r.Method != "POST" {
-		o := ViewObject{CurrentUser: user}
+		page := &models.Page{}
+		if titles != nil {
+			page.Title = titles[0]
+		}
+		if bodies != nil {
+			page.Body = bodies[0]
+		}
+		pages := []models.Page{*page}
+
+		o := ViewObject{CurrentUser: user, Pages: &pages}
 		render(w, "new_pages", o)
 		return
 	}
 
-	r.ParseForm()
-
-	title, body := r.Form["title"][0], r.Form["body"][0]
-	err = models.CreatePage(title, body)
+	err = models.CreatePage(titles[0], bodies[0])
 	if err != nil {
 		http.Error(w, err.Error(), 500)
 		return
 	}
 
 	setFlash(w, r, "Page has created.")
-	http.Redirect(w, r, "/pages/"+title, 301)
+	http.Redirect(w, r, "/pages/"+titles[0], 301)
 	return
 }
 
