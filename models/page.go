@@ -53,6 +53,10 @@ func FindPage(title string) (*Page, error) {
 		return nil, err
 	}
 
+	if len(pages) == 0 {
+		return nil, nil
+	}
+
 	return &pages[0], nil
 }
 
