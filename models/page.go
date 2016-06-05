@@ -16,7 +16,7 @@ func (p *Page) TableName() string {
 	return "pages"
 }
 
-func CreatePage(title, body string) error {
+func (p *Page) Create() error {
 	db, err := connect()
 	if err != nil {
 		return err
@@ -25,13 +25,10 @@ func CreatePage(title, body string) error {
 
 	t := time.Now()
 
-	page := &Page{
-		Title:     title,
-		Body:      body,
-		CreatedAt: &t,
-		UpdatedAt: &t,
-	}
-	_, err = db.Insert(page)
+	p.CreatedAt = &t
+	p.UpdatedAt = &t
+
+	_, err = db.Insert(p)
 	if err != nil {
 		return err
 	}
