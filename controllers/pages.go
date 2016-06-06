@@ -53,7 +53,7 @@ func ShowPage(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
 
-	page, err := models.FindPage(vars["title"])
+	page, err := models.FindPageByTitle(vars["title"])
 	if err != nil {
 		http.Error(w, err.Error(), 500)
 		return
@@ -78,7 +78,7 @@ func EditPage(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
 
-	page, err := models.FindPage(vars["title"])
+	page, err := models.FindPageByTitle(vars["title"])
 	if err != nil {
 		http.Error(w, err.Error(), 500)
 		return

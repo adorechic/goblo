@@ -36,7 +36,7 @@ func (p *Page) Create() error {
 	return nil
 }
 
-func FindPage(title string) (*Page, error) {
+func FindPageByTitle(title string) (*Page, error) {
 	db, err := connect()
 	if err != nil {
 		return nil, err
