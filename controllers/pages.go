@@ -84,6 +84,11 @@ func EditPage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if page == nil {
+		http.Redirect(w, r, "/newpage?title="+vars["title"], 301)
+		return
+	}
+
 	pages := []models.Page{*page}
 	o := ViewObject{CurrentUser: user, Pages: &pages}
 	render(w, "edit_pages", o)
