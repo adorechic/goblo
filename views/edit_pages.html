@@ -3,7 +3,7 @@
 {{ with $page := index .Pages 0 }}
 <div class="container">
 <h1>Edit Page</h1>
-<form action="/newpage" method="post" class="form-horizonal">
+<form action="/pages/{{$page.Id}}/update" method="post" class="form-horizonal">
   <div class="row">
     <div class="form-group">
       <label for="title" class="col-sm-1">title</label>

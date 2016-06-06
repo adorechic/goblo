@@ -36,6 +36,46 @@ func (p *Page) Create() error {
 	return nil
 }
 
+func (p *Page) Update() error {
+	db, err := connect()
+	if err != nil {
+		return err
+	}
+	defer db.Close()
+
+	t := time.Now()
+
+	p.UpdatedAt = &t
+
+	_, err = db.Update(p)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func FindPage(id int) (*Page, error) {
+	db, err := connect()
+	if err != nil {
+		return nil, err
+	}
+	defer db.Close()
+
+	var pages []Page
+
+	err = db.Select(&pages, db.Where("id", "=", id))
+	if err != nil {
+		return nil, err
+	}
+
+	if len(pages) == 0 {
+		return nil, nil
+	}
+
+	return &pages[0], nil
+}
+
 func FindPageByTitle(title string) (*Page, error) {
 	db, err := connect()
 	if err != nil {
