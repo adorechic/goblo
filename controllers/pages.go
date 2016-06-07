@@ -101,7 +101,7 @@ func UpdatePage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err := currentUser(r)
+	user, err := currentUser(r)
 	if err != nil {
 		http.Redirect(w, r, "/signin", 301)
 		return
@@ -130,6 +130,20 @@ func UpdatePage(w http.ResponseWriter, r *http.Request) {
 
 	page.Title = r.Form["title"][0]
 	page.Body = r.Form["body"][0]
+
+	validation_errors, err := page.ValidationErrors()
+	if err != nil {
+		http.Error(w, err.Error(), 500)
+		return
+	}
+
+	if len(validation_errors) != 0 {
+		pages := []models.Page{*page}
+		//TODO Show all errors
+		o := ViewObject{CurrentUser: user, Pages: &pages, Error: validation_errors[0]}
+		render(w, "edit_pages", o)
+		return
+	}
 
 	err = page.Update()
 	if err != nil {

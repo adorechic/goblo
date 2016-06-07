@@ -1,6 +1,7 @@
 package models
 
 import (
+	"strings"
 	"time"
 )
 
@@ -55,6 +56,30 @@ func (p *Page) Update() error {
 	return nil
 }
 
+func (p *Page) ValidationErrors() ([]string, error) {
+	errors := []string{}
+
+	if len(strings.TrimSpace(p.Title)) == 0 {
+		errors = append(errors, "Title is required")
+	} else {
+		pages, err := FindPagesByTitle(p.Title)
+		if err != nil {
+			return errors, err
+		}
+
+		for i := 0; i < len(pages); i++ {
+			if pages[i].Id != p.Id {
+				errors = append(errors, "Same title article exists")
+			}
+		}
+	}
+
+	if len(strings.TrimSpace(p.Body)) == 0 {
+		errors = append(errors, "Body is required")
+	}
+	return errors, nil
+}
+
 func FindPage(id int) (*Page, error) {
 	db, err := connect()
 	if err != nil {
@@ -77,6 +102,20 @@ func FindPage(id int) (*Page, error) {
 }
 
 func FindPageByTitle(title string) (*Page, error) {
+	pages, err := FindPagesByTitle(title)
+
+	if err != nil {
+		return nil, err
+	}
+
+	if len(pages) == 0 {
+		return nil, nil
+	}
+
+	return &pages[0], nil
+}
+
+func FindPagesByTitle(title string) ([]Page, error) {
 	db, err := connect()
 	if err != nil {
 		return nil, err
@@ -90,11 +129,7 @@ func FindPageByTitle(title string) (*Page, error) {
 		return nil, err
 	}
 
-	if len(pages) == 0 {
-		return nil, nil
-	}
-
-	return &pages[0], nil
+	return pages, nil
 }
 
 func AllPage() (*[]Page, error) {
