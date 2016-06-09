@@ -34,6 +34,20 @@ func NewPage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	validation_errors, err := page.ValidationErrors()
+	if err != nil {
+		http.Error(w, err.Error(), 500)
+		return
+	}
+
+	if len(validation_errors) != 0 {
+		pages := []models.Page{*page}
+		//TODO Show all errors
+		o := ViewObject{CurrentUser: user, Pages: &pages, Error: validation_errors[0]}
+		render(w, "new_pages", o)
+		return
+	}
+
 	err = page.Create()
 	if err != nil {
 		http.Error(w, err.Error(), 500)
