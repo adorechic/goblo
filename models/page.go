@@ -56,6 +56,21 @@ func (p *Page) Update() error {
 	return nil
 }
 
+func (p *Page) Delete() error {
+	db, err := connect()
+	if err != nil {
+		return err
+	}
+	defer db.Close()
+
+	_, err = db.Delete(p)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (p *Page) ValidationErrors() ([]string, error) {
 	errors := []string{}
 

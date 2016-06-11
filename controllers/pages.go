@@ -170,6 +170,49 @@ func UpdatePage(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
+func DeletePage(w http.ResponseWriter, r *http.Request) {
+	//TODO CSRF
+	if r.Method != "POST" {
+		http.Error(w, "Method Not Allowed", 405)
+		return
+	}
+
+	_, err := currentUser(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", 301)
+		return
+	}
+
+	vars := mux.Vars(r)
+
+	page_id, err := strconv.Atoi(vars["id"])
+	if err != nil {
+		http.Error(w, err.Error(), 400)
+		return
+	}
+
+	page, err := models.FindPage(page_id)
+	if err != nil {
+		http.Error(w, err.Error(), 500)
+		return
+	}
+
+	if page == nil {
+		http.Redirect(w, r, "/newpage?title="+vars["title"], 301)
+		return
+	}
+
+	err = page.Delete()
+	if err != nil {
+		http.Error(w, err.Error(), 500)
+		return
+	}
+
+	setFlash(w, r, "Page has removed.")
+	http.Redirect(w, r, "/pages", 301)
+	return
+}
+
 func IndexPage(w http.ResponseWriter, r *http.Request) {
 	user, err := currentUser(r)
 	if err != nil {
