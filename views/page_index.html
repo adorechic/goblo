@@ -3,10 +3,12 @@
   <tr>
     <th>Title</th>
     <th>Updated</th>
+    <th>Created</th>
   </tr>
   {{ range .Pages }}
   <tr>
     <td><a href="/pages/{{ .Title }}">{{ .Title }}</a></td>
+    <td>{{ .UpdatedAt }}</td>
     <td>{{ .CreatedAt }}</td>
   </tr>
   {{ end }}
