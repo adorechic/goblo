@@ -3,6 +3,7 @@ package models
 import (
 	"strings"
 	"time"
+	"github.com/naoina/genmai"
 )
 
 type Page struct {
@@ -156,7 +157,7 @@ func AllPage() (*[]Page, error) {
 
 	var pages []Page
 
-	err = db.Select(&pages)
+	err = db.Select(&pages, db.OrderBy("updated_at", genmai.DESC))
 	if err != nil {
 		return nil, err
 	}
