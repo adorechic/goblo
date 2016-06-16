@@ -4,7 +4,9 @@ import (
 	"errors"
 	"github.com/adorechic/goblo/models"
 	"github.com/gorilla/sessions"
+	"github.com/russross/blackfriday"
 	"html/template"
+	"log"
 	"net/http"
 )
 
@@ -17,8 +19,20 @@ type ViewObject struct {
 }
 
 func render(w http.ResponseWriter, name string, data interface{}) {
-	t := template.Must(template.ParseFiles("views/layout.html", "views/"+name+".html"))
-	t.Execute(w, data)
+	funcMap := template.FuncMap{
+		"markdown": func(text string) template.HTML {
+			markdown := blackfriday.MarkdownBasic([]byte(text))
+			return template.HTML(string(markdown))
+		},
+	}
+	t := template.New("")
+	t = t.Funcs(funcMap)
+	t = template.Must(t.ParseFiles("views/layout.html", "views/"+name+".html"))
+
+	err := t.ExecuteTemplate(w, "layout.html", data)
+	if err != nil {
+		log.Println(err)
+	}
 }
 
 func currentUser(r *http.Request) (*models.User, error) {

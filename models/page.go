@@ -1,9 +1,9 @@
 package models
 
 import (
+	"github.com/naoina/genmai"
 	"strings"
 	"time"
-	"github.com/naoina/genmai"
 )
 
 type Page struct {
